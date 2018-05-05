@@ -22,7 +22,8 @@ public class Block {
 		this.hash = calculateDigitalSignature();
 	}
 	
-	private String calculateDigitalSignature() {
+	// public because used in validation
+	public String calculateDigitalSignature() {
 		
 		// hash is the combination of all the block's properties
 		return HashHelper.hashData(data + Long.toString(timeStamp) + previousHash);
