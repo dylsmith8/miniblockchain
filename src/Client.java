@@ -4,6 +4,7 @@ import com.google.gson.*;
 public class Client {
 
 	public static ArrayList<Block> blockchain = new ArrayList<Block>();
+	final static int difficulty = 1;
 	
 	public static void main(String[] args) {
 	
@@ -17,6 +18,12 @@ public class Client {
 		if (ValidationHelpers.validateChain(blockchain)) {
 			System.out.println("Chain is valid");
 		}
+		
+		// mine each block 
+		for (Block b : blockchain) {
+			b.mineBlock(difficulty);
+		}
+		
 	}
 	
 	private void TestMethod() {

@@ -14,6 +14,8 @@ public class Block {
 	// previous block's hash
 	public String previousHash;
 	
+	private int nonce;
+	
 	public Block (String data, String previousHash) {
 		
 		this.data = data;
@@ -26,6 +28,19 @@ public class Block {
 	public String calculateDigitalSignature() {
 		
 		// hash is the combination of all the block's properties
-		return HashHelper.hashData(data + Long.toString(timeStamp) + previousHash);
+		return HashHelper.hashData(data + Long.toString(timeStamp) + previousHash + Integer.toString(nonce));
+	}
+	
+	// difficulty = number of 0s to solve for
+	public void mineBlock(int difficulty) {
+		
+		String target = new String(new char[difficulty]).replace('\0', '0');
+		
+		while (!hash.substring(0, difficulty).equals(target)) {
+			nonce++;
+			hash = calculateDigitalSignature();
+		}
+		
+		System.out.println("Successfully mined a block: " + hash);
 	}
 }
