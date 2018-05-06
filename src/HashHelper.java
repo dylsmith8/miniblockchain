@@ -1,5 +1,6 @@
 import java.io.UnsupportedEncodingException;
 import java.security.*;
+import java.util.Base64;
 
 public class HashHelper {
 	
@@ -24,18 +25,63 @@ public class HashHelper {
 			}	
 			
 		}
-		catch (NoSuchAlgorithmException ex) {
+		catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
 			handleError(ex);
-		}
-		catch (UnsupportedEncodingException ex) {
-			handleError(ex);			
 		}
 		
 		return hex.toString();
 	}
 	
+	public static String getPublicKeyString(PublicKey publicKey) {
+		
+		return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+	}
+	
 	private static void handleError(Exception exception) {
-		System.out.println("An error occurred hashing the blockchain data:\n");
+		
+		System.out.println("An error occurred hashing/verification of the blockchain data:\n");
 		exception.printStackTrace();
+	}
+
+	public static byte[] signDataWithPrivateKey (PrivateKey privateKey, String input) {
+		
+		byte [] signature = new byte[0];
+		
+		try {
+			
+			Signature dsa;
+			
+			// give it the private key
+			dsa = Signature.getInstance("ECDSA", "BC");
+			dsa.initSign(privateKey);
+			
+			byte[] stringBytes = input.getBytes();
+			dsa.update(stringBytes);
+			
+			signature = dsa.sign();			
+		}
+		catch (NoSuchProviderException | NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
+			handleError(ex);
+		}
+		
+		return signature;
+	}	
+
+	public static Boolean verifySignature(PublicKey publicKey, String data, byte[] signature) {
+		
+		Boolean isVerified = false;
+		
+		try {
+			
+			Signature verificationSig;
+			verificationSig = Signature.getInstance("ECDSA", "BC");
+			verificationSig.initVerify(publicKey);
+			verificationSig.update(data.getBytes());
+			isVerified = verificationSig.verify(signature);
+		} catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException | SignatureException ex) {
+			handleError(ex);
+		}
+		
+		return isVerified;
 	}
 }

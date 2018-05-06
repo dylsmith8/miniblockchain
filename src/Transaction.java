@@ -37,10 +37,6 @@ public class Transaction {
 	
 	private String calculateTransactionId() {
 		transactionCount++;
-		return HashHelper.hashData(getPublicKeyString(sender) + getPublicKeyString(receiver) + Double.toString(value) + transactionId);
-	}
-	
-	private static String getPublicKeyString(PublicKey publicKey) {
-		return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+		return HashHelper.hashData(HashHelper.getPublicKeyString(sender) + HashHelper.getPublicKeyString(receiver) + Double.toString(value) + transactionId);
 	}
 }
