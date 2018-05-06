@@ -32,9 +32,9 @@ public class HashHelper {
 		return hex.toString();
 	}
 	
-	public static String getPublicKeyString(PublicKey publicKey) {
+	public static String getKeyString(Key key) {
 		
-		return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+		return Base64.getEncoder().encodeToString(key.getEncoded());
 	}
 	
 	private static void handleError(Exception exception) {

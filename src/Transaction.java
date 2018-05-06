@@ -1,7 +1,5 @@
 import java.security.*;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.Base64;
 
 public class Transaction {
 	// the hash of the transaction
@@ -37,6 +35,16 @@ public class Transaction {
 	
 	private String calculateTransactionId() {
 		transactionCount++;
-		return HashHelper.hashData(HashHelper.getPublicKeyString(sender) + HashHelper.getPublicKeyString(receiver) + Double.toString(value) + transactionId);
+		return HashHelper.hashData(HashHelper.getKeyString(sender) + HashHelper.getKeyString(receiver) + Double.toString(value) + transactionId);
+	}
+
+	public void generateSignature(PrivateKey privateKey) {
+		String data = HashHelper.getKeyString(sender) + HashHelper.getKeyString(receiver) + Double.toString(value);
+		sig = HashHelper.signDataWithPrivateKey(privateKey, data);
+	}
+
+	public Boolean verifySignature() {
+		String data = HashHelper.getKeyString(sender) + HashHelper.getKeyString(receiver) + Double.toString(value);
+		return HashHelper.verifySignature(sender, data, sig);
 	}
 }
