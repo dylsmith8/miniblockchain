@@ -1,5 +1,7 @@
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.google.gson.*;
 
 public class Client {
@@ -9,6 +11,9 @@ public class Client {
 
 	public static CryptoWallet walletA;
 	public static CryptoWallet walletB;
+	
+	//list of all unspent transactions (UTXOs). 
+	public static HashMap<String, TransactionOutput> UTXOs = new HashMap<String, TransactionOutput>(); 
 	
 	public static void main(String[] args) {
 		TestMethod();
